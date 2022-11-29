@@ -9,6 +9,10 @@ class LottoGame {
     return this.#lottos;
   }
 
+  getWinningNumbers() {
+    return this.#winningNumbers;
+  }
+
   setWinningNumbers(winningNumbers) {
     this.#winningNumbers = winningNumbers;
   }
