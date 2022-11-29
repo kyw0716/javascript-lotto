@@ -14,10 +14,18 @@ const GuideString = Object.freeze({
 });
 
 const ErrorString = Object.freeze({
+  LOTTO_COUNT_ERROR: "[ERROR] 로또 번호는 6개여야 합니다.",
+  LOTTO_DUPLICATE_ERROR:
+    "[ERROR] 로또 번호는 중복 되지 않는 6개의 숫자로 이루어져야 합니다.",
+  LOTTO_NOT_NUMBER_ERROR: "[ERROR] 로또 번호는 숫자만 사용 가능 합니다.",
+  LOTTO_OUT_OF_RANGE_ERROR:
+    "[ERROR] 로또 번호는 1 ~ 45 범위 내의 숫자만 사용 가능합니다.",
+
   PURCHASE_PRICE_UNIT_ERROR:
     "[ERROR] 구입 금액은 1000원 단위로 입력해야 합니다.",
   PURCHASE_PRICE_NOT_NUMBER_ERROR:
     "[ERROR] 구입 금액은 숫자만 입력 가능합니다.",
+
   WINNING_NUMBER_COUNT_ERROR: `[ERROR] 당첨 번호는 ${StaticNumber.LOTTO_NUMBER_COUNT}개 입력해야 합니다.`,
   WINNING_NUMBER_NOT_NUMBER_ERROR:
     "[ERROR] 당첨 번호는 숫자만 입력 가능합니다.",
@@ -25,6 +33,7 @@ const ErrorString = Object.freeze({
     "[ERROR] 당첨 번호는 1 ~ 45 범위 내의 숫자만 입력 가능합니다.",
   WINNING_NUMBER_DUPLICATE_ERROR:
     "[ERROR] 당첨 번호는 중복되지 않는 숫자만 입력 가능합니다.",
+
   BONUS_NUMBER_NOT_NUMBER_ERROR:
     "[ERROR] 보너스 번호는 숫자만 입력 가능합니다.",
   BONUS_NUMBER_OUT_OF_RANGE_ERROR:
@@ -32,6 +41,8 @@ const ErrorString = Object.freeze({
   BONUS_NUMBER_DUPLICATE_ERROR:
     "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.",
 });
+
+const WinningPrize = [2000000000, 30000000, 1500000, 50000, 5000];
 
 const StatisticString = [
   "3개 일치 (5,000원) - ",
@@ -46,4 +57,5 @@ module.exports = {
   GuideString,
   ErrorString,
   StatisticString,
+  WinningPrize,
 };

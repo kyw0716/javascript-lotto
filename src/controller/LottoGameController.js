@@ -10,6 +10,10 @@ class LottoGameController {
 
   constructor() {}
 
+  startGame() {
+    this.inputPurchasePrice();
+  }
+
   inputPurchasePrice() {
     InputView.readPurchasePrice(
       this.inputPurchasePriceCallback,
@@ -49,13 +53,18 @@ class LottoGameController {
   }
 
   displayWinningStatistic() {
-    OutputView.printShowResultString();
-    OutputView.printWinningStatistic(this.#lottoGame.getWinningStatistic());
+    const winningStatistic = this.#lottoGame.getWinningStatistic();
+
+    OutputView.printWinningStatistic(winningStatistic);
+    OutputView.printRevenueRate(
+      this.#lottoGame.getRevenueRate(winningStatistic)
+    );
   }
 
   inputPurchasePriceCallback = (input) => {
     const purchaseAmount = input / StaticNumber.PRICE_FOR_ONE_LOTTO;
 
+    this.#lottoGame.setPurchasePrice(input);
     OutputView.printPurchaseAmount(purchaseAmount);
     this.purchaseLottos(purchaseAmount);
   };

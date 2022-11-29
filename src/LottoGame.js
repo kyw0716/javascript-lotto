@@ -1,4 +1,7 @@
+const { WinningPrize, StaticNumber } = require("./static/Static");
+
 class LottoGame {
+  #purchasePrice;
   #lottos = [];
   #winningNumbers;
   #bonusNumber;
@@ -13,6 +16,10 @@ class LottoGame {
     return this.#winningNumbers;
   }
 
+  setPurchasePrice(purchasePrice) {
+    this.#purchasePrice = purchasePrice;
+  }
+
   setWinningNumbers(winningNumbers) {
     this.#winningNumbers = winningNumbers;
   }
@@ -22,7 +29,7 @@ class LottoGame {
   }
 
   getWinningStatistic() {
-    const winningStatistic = Array(5).fill(0);
+    const winningStatistic = Array(StaticNumber.TOTAL_LOTTO_RANKS).fill(0);
 
     for (let i = 0; i < this.#lottos.length; i++) {
       const score = this.#lottos[i].getRank(
@@ -33,6 +40,16 @@ class LottoGame {
     }
 
     return winningStatistic;
+  }
+
+  getRevenueRate(winningStatistic) {
+    let revenue = 0;
+
+    winningStatistic.forEach((v, i) => {
+      revenue += WinningPrize[i] * v;
+    });
+
+    return ((revenue / this.#purchasePrice) * 100).toFixed(1);
   }
 }
 
