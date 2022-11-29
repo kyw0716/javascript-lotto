@@ -12,8 +12,8 @@ class Lotto {
     }
   }
 
-  getLottoNumber() {
-    return this.#numbers;
+  getSortedLottoNumber() {
+    return this.#numbers.sort((a, b) => a - b);
   }
 }
 

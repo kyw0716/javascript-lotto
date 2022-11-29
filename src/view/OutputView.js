@@ -7,7 +7,7 @@ const OutputView = {
 
   printLottos(lottos) {
     for (let i = 0; i < lottos.length; i++) {
-      Console.print(lottos[i].getLottoNumber());
+      Console.print(lottos[i].getSortedLottoNumber());
     }
   },
 };

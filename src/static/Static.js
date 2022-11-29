@@ -4,7 +4,8 @@ const LOTTO_NUMBER_RANGE_END = 45;
 const LOTTO_NUMBER_COUNT = 6;
 
 const GuideString = Object.freeze({
-  INPUT_PURCHASE_PRICE: "구입금액을 입력해 주세요.",
+  INPUT_PURCHASE_PRICE: "구입금액을 입력해 주세요.\n",
+  INPUT_WINNING_NUMBER: "\n당첨 번호를 입력해 주세요.\n",
 });
 
 module.exports = {

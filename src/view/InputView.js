@@ -7,6 +7,12 @@ const InputView = {
       callback(input);
     });
   },
+
+  readWinningNumber(callback) {
+    Console.readLine(GuideString.INPUT_WINNING_NUMBER, (input) => {
+      callback(input);
+    });
+  },
 };
 
 module.exports = { InputView };

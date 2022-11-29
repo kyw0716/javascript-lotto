@@ -1,11 +1,12 @@
 const Lotto = require("../Lotto");
+const LottoGame = require("../LottoGame");
 const { PRICE_FOR_ONE_LOTTO } = require("../static/Static");
 const { LottoNumberGenerator } = require("../utils/LottoNumberGenerator");
 const { InputView } = require("../view/InputView");
 const { OutputView } = require("../view/OutputView");
 
 class LottoGameController {
-  #lottos = [];
+  #lottoGame = new LottoGame();
 
   constructor() {}
 
@@ -14,17 +15,32 @@ class LottoGameController {
       const purchaseAmount = input / PRICE_FOR_ONE_LOTTO;
 
       OutputView.printPurchaseAmount(purchaseAmount);
-
-      for (let i = 0; i < purchaseAmount; i++) {
-        this.#lottos.push(new Lotto(LottoNumberGenerator.generate()));
-      }
-
-      this.displayPurchasedLottos();
+      this.purchaseLottos(purchaseAmount);
     });
   }
 
+  inputWinnigNumber() {
+    InputView.readWinningNumber((input) => {
+      const winningNumbers = input.split(",");
+
+      this.#lottoGame.setWinningNumbers(winningNumbers);
+    });
+  }
+
+  purchaseLottos(purchaseAmount) {
+    for (let i = 0; i < purchaseAmount; i++) {
+      this.#lottoGame
+        .getLottos()
+        .push(new Lotto(LottoNumberGenerator.generate()));
+    }
+
+    this.displayPurchasedLottos();
+  }
+
   displayPurchasedLottos() {
-    OutputView.printLottos(this.#lottos);
+    OutputView.printLottos(this.#lottoGame.getLottos());
+
+    this.inputWinnigNumber();
   }
 }
 
