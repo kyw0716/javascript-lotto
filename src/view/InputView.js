@@ -13,6 +13,12 @@ const InputView = {
       callback(input);
     });
   },
+
+  readBonusNumber(callback) {
+    Console.readLine(GuideString.INPUT_BONUS_NUMBER, (input) => {
+      callback(input);
+    });
+  },
 };
 
 module.exports = { InputView };
