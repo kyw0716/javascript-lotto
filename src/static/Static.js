@@ -3,12 +3,14 @@ const StaticNumber = Object.freeze({
   LOTTO_NUMBER_RANGE_START: 1,
   LOTTO_NUMBER_RANGE_END: 45,
   LOTTO_NUMBER_COUNT: 6,
+  TOTAL_LOTTO_RANKS: 5,
 });
 
 const GuideString = Object.freeze({
   INPUT_PURCHASE_PRICE: "구입금액을 입력해 주세요.\n",
   INPUT_WINNING_NUMBER: "\n당첨 번호를 입력해 주세요.\n",
   INPUT_BONUS_NUMBER: "\n보너스 번호를 입력해 주세요.\n",
+  SHOW_RESULT: "\n당첨 통계\n---",
 });
 
 const ErrorString = Object.freeze({
@@ -31,8 +33,17 @@ const ErrorString = Object.freeze({
     "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.",
 });
 
+const StatisticString = [
+  "3개 일치 (5,000원) - ",
+  "4개 일치 (50,000원) - ",
+  "5개 일치 (1,500,000원) - ",
+  "5개 일치, 보너스 볼 일치 (30,000,000원) - ",
+  "6개 일치 (2,000,000,000원) - ",
+];
+
 module.exports = {
   StaticNumber,
   GuideString,
   ErrorString,
+  StatisticString,
 };

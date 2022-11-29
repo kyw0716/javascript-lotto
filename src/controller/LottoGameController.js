@@ -48,6 +48,11 @@ class LottoGameController {
     this.inputWinnigNumber();
   }
 
+  displayWinningStatistic() {
+    OutputView.printShowResultString();
+    OutputView.printWinningStatistic(this.#lottoGame.getWinningStatistic());
+  }
+
   inputPurchasePriceCallback = (input) => {
     const purchaseAmount = input / StaticNumber.PRICE_FOR_ONE_LOTTO;
 
@@ -64,6 +69,7 @@ class LottoGameController {
 
   inputBonusNumberCallback = (input) => {
     this.#lottoGame.setBonusNumber(input);
+    this.displayWinningStatistic();
   };
 
   validatePurchasePrice(input) {
@@ -97,3 +103,5 @@ class LottoGameController {
 }
 
 module.exports = { LottoGameController };
+
+new LottoGameController().inputPurchasePrice();
