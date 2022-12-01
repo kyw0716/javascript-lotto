@@ -2,23 +2,20 @@ const { Console } = require("@woowacourse/mission-utils");
 const { GuideString } = require("../static/Static");
 
 const InputView = {
-  readPurchasePrice(callback, validate) {
-    Console.readLine(GuideString.INPUT_PURCHASE_PRICE, (input) => {
-      validate(input);
-      callback(input);
-    });
+  readPurchasePrice(callback) {
+    this.getUserInput(GuideString.INPUT_PURCHASE_PRICE, callback);
   },
 
-  readWinningNumber(callback, validate) {
-    Console.readLine(GuideString.INPUT_WINNING_NUMBER, (input) => {
-      validate(input);
-      callback(input);
-    });
+  readWinningNumber(callback) {
+    this.getUserInput(GuideString.INPUT_WINNING_NUMBER, callback);
   },
 
-  readBonusNumber(callback, validate, winningNumbers) {
-    Console.readLine(GuideString.INPUT_BONUS_NUMBER, (input) => {
-      validate(input, winningNumbers);
+  readBonusNumber(callback) {
+    this.getUserInput(GuideString.INPUT_BONUS_NUMBER, callback);
+  },
+
+  getUserInput(guide, callback) {
+    Console.readLine(guide, (input) => {
       callback(input);
     });
   },

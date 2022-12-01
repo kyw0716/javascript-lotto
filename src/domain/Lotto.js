@@ -1,4 +1,4 @@
-const { ErrorString } = require("./static/Static");
+const { ErrorString, StaticNumber } = require("../static/Static");
 
 class Lotto {
   #numbers;
@@ -9,12 +9,13 @@ class Lotto {
   }
 
   validate(numbers) {
-    if (numbers.length !== 6) throw new Error(ErrorString.LOTTO_COUNT_ERROR);
+    if (numbers.length !== StaticNumber.LOTTO_NUMBER_COUNT)
+      throw new Error(ErrorString.LOTTO_COUNT_ERROR);
     if (numbers.length !== new Set(numbers).size)
       throw new Error(ErrorString.LOTTO_DUPLICATE_ERROR);
     if (numbers.join("").replace(/\d/g, "").length > 0)
       throw new Error(ErrorString.LOTTO_NOT_NUMBER_ERROR);
-    if (numbers.filter((v) => v > 45 || v < 1).length > 0)
+    if (numbers.filter(this.rangeFilterFunction).length > 0)
       throw new Error(ErrorString.LOTTO_OUT_OF_RANGE_ERROR);
   }
 
@@ -34,10 +35,17 @@ class Lotto {
 
   getSameNumberCount(winningNumbers) {
     const count = winningNumbers
-      .map((v) => Number(v))
+      .map(Number)
       .filter((v) => this.#numbers.includes(v)).length;
 
     return count;
+  }
+
+  rangeFilterFunction(value) {
+    return (
+      value > StaticNumber.LOTTO_NUMBER_RANGE_END ||
+      value < StaticNumber.LOTTO_NUMBER_RANGE_START
+    );
   }
 }
 

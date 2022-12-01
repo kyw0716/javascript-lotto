@@ -1,12 +1,13 @@
-const Lotto = require("../Lotto");
-const LottoGame = require("../LottoGame");
-const { StaticNumber, ErrorString } = require("../static/Static");
+const Lotto = require("../domain/Lotto");
+const LottoGameModel = require("../domain/LottoGameModel");
+const { StaticNumber } = require("../static/Static");
 const { LottoNumberGenerator } = require("../utils/LottoNumberGenerator");
 const { InputView } = require("../view/InputView");
 const { OutputView } = require("../view/OutputView");
+const { InputValidator } = require("../utils/InputValidator");
 
 class LottoGameController {
-  #lottoGame = new LottoGame();
+  #lottoGame = new LottoGameModel();
 
   constructor() {}
 
@@ -15,24 +16,62 @@ class LottoGameController {
   }
 
   inputPurchasePrice() {
-    InputView.readPurchasePrice(
-      this.inputPurchasePriceCallback,
-      this.validatePurchasePrice
-    );
+    InputView.readPurchasePrice(this.callbackInputPurchasePrice);
   }
 
   inputWinnigNumber() {
-    InputView.readWinningNumber(
-      this.inputWinnigNumberCallback,
-      this.validateWinningNumbers
-    );
+    InputView.readWinningNumber(this.callbackInputWinningNumber);
   }
 
   inputBonusNumber() {
-    InputView.readBonusNumber(
-      this.inputBonusNumberCallback,
-      this.validateBonusNumbers,
+    InputView.readBonusNumber(this.callbackInputBonusNumber);
+  }
+
+  callbackInputPurchasePrice = (input) => {
+    const purchaseAmount = input / StaticNumber.PRICE_FOR_ONE_LOTTO;
+
+    InputValidator.validatePurchasePrice(input);
+
+    this.displayPurchaseAmount(purchaseAmount);
+  };
+
+  callbackInputWinningNumber = (input) => {
+    const winningNumbers = input.split(",");
+
+    InputValidator.validateWinningNumbers(input);
+
+    this.#lottoGame.setWinningNumbers(winningNumbers);
+    this.inputBonusNumber();
+  };
+
+  callbackInputBonusNumber = (input) => {
+    InputValidator.validateBonusNumber(
+      input,
       this.#lottoGame.getWinningNumbers()
+    );
+
+    this.#lottoGame.setBonusNumber(input);
+    this.displayRankStatistic();
+  };
+
+  displayPurchaseAmount(purchaseAmount) {
+    OutputView.printPurchaseAmount(purchaseAmount);
+
+    this.purchaseLottos(purchaseAmount);
+  }
+
+  displayPurchasedLottos() {
+    OutputView.printLottos(this.#lottoGame.getLottos());
+
+    this.inputWinnigNumber();
+  }
+
+  displayRankStatistic() {
+    const winningStatistic = this.#lottoGame.getRankStatistic();
+
+    OutputView.printRankStatistic(winningStatistic);
+    OutputView.printRevenueRate(
+      this.#lottoGame.getRevenueRate(winningStatistic)
     );
   }
 
@@ -44,70 +83,6 @@ class LottoGameController {
     }
 
     this.displayPurchasedLottos();
-  }
-
-  displayPurchasedLottos() {
-    OutputView.printLottos(this.#lottoGame.getLottos());
-
-    this.inputWinnigNumber();
-  }
-
-  displayWinningStatistic() {
-    const winningStatistic = this.#lottoGame.getWinningStatistic();
-
-    OutputView.printWinningStatistic(winningStatistic);
-    OutputView.printRevenueRate(
-      this.#lottoGame.getRevenueRate(winningStatistic)
-    );
-  }
-
-  inputPurchasePriceCallback = (input) => {
-    const purchaseAmount = input / StaticNumber.PRICE_FOR_ONE_LOTTO;
-
-    this.#lottoGame.setPurchasePrice(input);
-    OutputView.printPurchaseAmount(purchaseAmount);
-    this.purchaseLottos(purchaseAmount);
-  };
-
-  inputWinnigNumberCallback = (input) => {
-    const winningNumbers = input.split(",");
-
-    this.#lottoGame.setWinningNumbers(winningNumbers);
-    this.inputBonusNumber();
-  };
-
-  inputBonusNumberCallback = (input) => {
-    this.#lottoGame.setBonusNumber(input);
-    this.displayWinningStatistic();
-  };
-
-  validatePurchasePrice(input) {
-    if (input.replace(/\d/g, "").length > 0)
-      throw new Error(ErrorString.PURCHASE_PRICE_NOT_NUMBER_ERROR);
-    if (input % 1000 !== 0 || Number(input) === 0)
-      throw new Error(ErrorString.PURCHASE_PRICE_UNIT_ERROR);
-  }
-
-  validateWinningNumbers(input) {
-    const inputNumbers = input.split(",");
-
-    if (inputNumbers.length !== StaticNumber.LOTTO_NUMBER_COUNT)
-      throw new Error(ErrorString.WINNING_NUMBER_COUNT_ERROR);
-    if (input.replace(/\d|\,/g, "").length > 0)
-      throw new Error(ErrorString.WINNING_NUMBER_NOT_NUMBER_ERROR);
-    if (inputNumbers.filter((v) => v > 45 || v < 1).length > 0)
-      throw new Error(ErrorString.WINNING_NUMBER_OUT_OF_RANGE_ERROR);
-    if (inputNumbers.length !== new Set(inputNumbers).size)
-      throw new Error(ErrorString.WINNING_NUMBER_DUPLICATE_ERROR);
-  }
-
-  validateBonusNumbers(input, winningNumbers) {
-    if (input.replace(/\d/g, "").length > 0)
-      throw new Error(ErrorString.BONUS_NUMBER_NOT_NUMBER_ERROR);
-    if (input > 45 || input < 1)
-      throw new Error(ErrorString.BONUS_NUMBER_OUT_OF_RANGE_ERROR);
-    if (winningNumbers.includes(input))
-      throw new Error(ErrorString.BONUS_NUMBER_DUPLICATE_ERROR);
   }
 }
 

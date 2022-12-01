@@ -1,9 +1,5 @@
 const { Console } = require("@woowacourse/mission-utils");
-const {
-  StatisticString,
-  GuideString,
-  StaticNumber,
-} = require("../static/Static");
+const { StatisticString, StaticNumber } = require("../static/Static");
 
 const OutputView = {
   printPurchaseAmount(amount) {
@@ -16,7 +12,7 @@ const OutputView = {
     }
   },
 
-  printWinningStatistic(winningStatistic) {
+  printRankStatistic(winningStatistic) {
     const raps = winningStatistic.length;
 
     for (let i = 0; i < raps; i++) {

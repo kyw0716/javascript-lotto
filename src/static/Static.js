@@ -1,9 +1,10 @@
 const StaticNumber = Object.freeze({
-  PRICE_FOR_ONE_LOTTO: 1000,
+  PRICE_FOR_ONE_LOTTO: 1_000,
   LOTTO_NUMBER_RANGE_START: 1,
   LOTTO_NUMBER_RANGE_END: 45,
   LOTTO_NUMBER_COUNT: 6,
   TOTAL_LOTTO_RANKS: 5,
+  REVENUE_SIGNIFICANT_FIGURES: 1,
 });
 
 const GuideString = Object.freeze({
@@ -42,7 +43,7 @@ const ErrorString = Object.freeze({
     "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.",
 });
 
-const WinningPrize = [2000000000, 30000000, 1500000, 50000, 5000];
+const WinningPrize = [2_000_000_000, 30_000_000, 1_500_000, 50_000, 5_000];
 
 const StatisticString = [
   "3개 일치 (5,000원) - ",
