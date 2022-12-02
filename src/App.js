@@ -1,5 +1,10 @@
+const { LottoGameController } = require("./controller/LottoGameController");
+
 class App {
-  play() {}
+  play() {
+    const lottoGame = new LottoGameController();
+    lottoGame.startGame();
+  }
 }
 
 module.exports = App;
