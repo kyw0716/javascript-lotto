@@ -1,13 +1,15 @@
-const Lotto = require("../domain/Lotto");
-const LottoGameModel = require("../domain/LottoGameModel");
 const { StaticNumber } = require("../static/Static");
-const { LottoNumberGenerator } = require("../utils/LottoNumberGenerator");
 const { InputView } = require("../view/InputView");
 const { OutputView } = require("../view/OutputView");
-const { InputValidator } = require("../utils/InputValidator");
+const PurchasedLottos = require("../domain/PurchasedLottos");
+const WinningNumbers = require("../domain/WinningNumbers");
+const BonusNumber = require("../domain/BonusNumber");
+const ResultCalculator = require("../utils/ResultCalculator");
 
 class LottoGameController {
-  #lottoGame = new LottoGameModel();
+  #lottos;
+  #winningNumbers;
+  #bonusNumber;
 
   constructor() {}
 
@@ -16,73 +18,52 @@ class LottoGameController {
   }
 
   inputPurchasePrice() {
-    InputView.readPurchasePrice(this.callbackInputPurchasePrice);
+    InputView.readPurchasePrice((input) => {
+      this.purchaseLottos(input);
+    });
   }
 
   inputWinnigNumber() {
-    InputView.readWinningNumber(this.callbackInputWinningNumber);
+    InputView.readWinningNumber((input) => {
+      this.#winningNumbers = new WinningNumbers(input);
+      this.inputBonusNumber();
+    });
   }
 
   inputBonusNumber() {
-    InputView.readBonusNumber(this.callbackInputBonusNumber);
+    InputView.readBonusNumber((input) => {
+      this.#bonusNumber = new BonusNumber(
+        input,
+        this.#winningNumbers.getWinningNumbers()
+      );
+
+      this.displayRankStatistic();
+    });
   }
 
-  callbackInputPurchasePrice = (input) => {
-    const purchaseAmount = input / StaticNumber.PRICE_FOR_ONE_LOTTO;
+  purchaseLottos(input) {
+    this.#lottos = new PurchasedLottos(input);
 
-    InputValidator.validatePurchasePrice(input);
-
-    this.displayPurchaseAmount(purchaseAmount);
-  };
-
-  callbackInputWinningNumber = (input) => {
-    const winningNumbers = input.split(",");
-
-    InputValidator.validateWinningNumbers(input);
-
-    this.#lottoGame.setWinningNumbers(winningNumbers);
-    this.inputBonusNumber();
-  };
-
-  callbackInputBonusNumber = (input) => {
-    InputValidator.validateBonusNumber(
-      input,
-      this.#lottoGame.getWinningNumbers()
-    );
-
-    this.#lottoGame.setBonusNumber(input);
-    this.displayRankStatistic();
-  };
-
-  displayPurchaseAmount(purchaseAmount) {
-    OutputView.printPurchaseAmount(purchaseAmount);
-
-    this.purchaseLottos(purchaseAmount);
-  }
-
-  displayPurchasedLottos() {
-    OutputView.printLottos(this.#lottoGame.getLottos());
+    OutputView.printPurchaseAmount(input / StaticNumber.PRICE_FOR_ONE_LOTTO);
+    OutputView.printLottos(this.#lottos.getLottos());
 
     this.inputWinnigNumber();
   }
 
   displayRankStatistic() {
-    const winningStatistic = this.#lottoGame.getRankStatistic();
+    const winningStatistic = ResultCalculator.getRankStatistic({
+      lottos: this.#lottos.getLottos(),
+      winningNumbers: this.#winningNumbers.getWinningNumbers(),
+      bounsNumber: this.#bonusNumber.getBonusNumber(),
+    });
 
     OutputView.printRankStatistic(winningStatistic);
     OutputView.printRevenueRate(
-      this.#lottoGame.getRevenueRate(winningStatistic)
+      ResultCalculator.getRevenueRate({
+        winningStatistic: winningStatistic,
+        purchasedAmount: this.#lottos.getLottos().length,
+      })
     );
-  }
-
-  purchaseLottos(purchaseAmount) {
-    for (let i = 0; i < purchaseAmount; i++) {
-      this.#lottoGame
-        .getLottos()
-        .push(new Lotto(LottoNumberGenerator.generate()));
-    }
-
-    this.displayPurchasedLottos();
   }
 }
 
