@@ -1,7 +1,10 @@
 const { Console } = require("@woowacourse/mission-utils");
+const { GuideString } = require("../static/Static");
 
 const InputView = {
-  readPurchasePrice() {},
+  readPurchasePrice(callback) {
+    this.getUserInput(GuideString.PURCHASE_PRICE, callback);
+  },
 
   readWinningNumber() {},
 
@@ -13,3 +16,5 @@ const InputView = {
     });
   },
 };
+
+module.exports = InputView;
