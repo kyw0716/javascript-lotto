@@ -30,6 +30,18 @@ class PurchasedLottos {
   getLottos() {
     return this.#lottos;
   }
+
+  getRankStatistics(winningNumber, bonusNumber) {
+    const rank = new Array(StaticValue.LOTTO_RANK_COUNT).fill(0);
+
+    this.#lottos.forEach((lotto) => {
+      const lottoRank = lotto.getRank(winningNumber, bonusNumber);
+      if (lottoRank !== undefined)
+        rank[StaticValue.LOTTO_RANK_COUNT - lottoRank] += 1;
+    });
+
+    return rank;
+  }
 }
 
 module.exports = PurchasedLottos;

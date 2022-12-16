@@ -1,12 +1,14 @@
 const PurchasedLottos = require("../domains/PurchasedLottos");
 const InputView = require("../view/InputView");
 const OutPutView = require("../view/OutputView");
-const { Console } = require("@woowacourse/mission-utils");
 const WinningNumber = require("../domains/WinningNumber");
+const BonusNumber = require("../domains/BonusNumber");
+const { WinningPrize } = require("../static/Static");
 
 class LottoGameController {
   #lottos;
   #winningNumber;
+  #bonusNumber;
 
   constructor() {}
 
@@ -16,24 +18,27 @@ class LottoGameController {
 
   inputPurchasePrice() {
     InputView.readPurchasePrice((input) => {
-      try {
-        this.#lottos = new PurchasedLottos(input);
-        this.handlePurchaseLottos();
-      } catch (error) {
-        OutPutView.printError(error);
-        Console.close();
-      }
+      this.#lottos = new PurchasedLottos(input);
+      this.handlePurchaseLottos();
     });
   }
 
   inputWinningNumber() {
     InputView.readWinningNumber((input) => {
-      try {
-        this.#winningNumber = new WinningNumber(input);
-      } catch (error) {
-        OutPutView.printError(error);
-        Console.close();
-      }
+      this.#winningNumber = new WinningNumber(input);
+
+      this.inputBonusNumber();
+    });
+  }
+
+  inputBonusNumber() {
+    InputView.readBonusNumber((input) => {
+      this.#bonusNumber = new BonusNumber(
+        input,
+        this.#winningNumber.getNumber()
+      );
+
+      this.handleCacluateRank();
     });
   }
 
@@ -43,6 +48,27 @@ class LottoGameController {
     OutPutView.printLottoNumber(lottos);
 
     this.inputWinningNumber();
+  }
+
+  handleCacluateRank() {
+    const ranks = this.#lottos.getRankStatistics(
+      this.#winningNumber.getNumber(),
+      this.#bonusNumber.getNumber()
+    );
+
+    OutPutView.printRank(ranks);
+
+    this.handleCacluateRevenue(ranks);
+  }
+
+  handleCacluateRevenue(ranks) {
+    let revenue = 0;
+
+    ranks.forEach((rank, i) => {
+      revenue += rank *= WinningPrize[i];
+    });
+
+    OutPutView.printRevenue(revenue, this.#lottos.getLottos().length);
   }
 }
 

@@ -5,6 +5,7 @@ class WinningNumber {
 
   constructor(input) {
     const inputArray = input.split(",").map((v) => parseInt(v, 10));
+
     this.validate(input, inputArray);
     this.#winningNumber = inputArray;
   }

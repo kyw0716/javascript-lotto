@@ -10,7 +10,9 @@ const InputView = {
     this.getUserInput(GuideString.WINNING_NUMBER, callback);
   },
 
-  readBonusNumber() {},
+  readBonusNumber(callback) {
+    this.getUserInput(GuideString.BONUS_NUMBER, callback);
+  },
 
   getUserInput(guide, callback) {
     Console.readLine(guide, (input) => {

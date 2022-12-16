@@ -1,7 +1,7 @@
 const WinningNumber = require("../src/domains/WinningNumber");
 
-describe("구입된 로또 클래스 테스트", () => {
-  test("구입 금액에 유효하지 않은 값이 입력되면 예외가 발생한다.", () => {
+describe("당첨 번호 클래스 테스트", () => {
+  test("당첨 번호에 유효하지 않은 값이 입력되면 예외가 발생한다.", () => {
     const INVALID_INPUTS = [
       "j,2,3,4,5,6",
       "1,1,2,3,4,5,6",
