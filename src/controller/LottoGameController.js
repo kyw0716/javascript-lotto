@@ -16,11 +16,18 @@ class LottoGameController {
     InputView.readPurchasePrice((input) => {
       try {
         this.#lottos = new PurchasedLottos(input);
+        this.handlePurchaseLottos();
       } catch (error) {
         OutPutView.printError(error);
         Console.close();
       }
     });
+  }
+
+  handlePurchaseLottos() {
+    const lottos = this.#lottos.getLottos();
+
+    OutPutView.printLottoNumber(lottos);
   }
 }
 
