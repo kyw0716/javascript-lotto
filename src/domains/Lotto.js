@@ -14,6 +14,8 @@ class Lotto {
     }
     if (numbers.length !== new Set(numbers).size)
       throw new Error(ErrorString.WINNING_NUMBER_DUPLICATE_ERROR);
+    if (numbers.replace(/\d/g, "").length > 0)
+      throw new Error(ErrorString.WINNING_NUMBER_NOT_NUMBER_ERROR);
   }
 
   getNumbers() {

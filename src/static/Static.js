@@ -23,6 +23,8 @@ const ErrorString = Object.freeze({
     "[ERROR] 로또 번호는 중복을 포함할 수 없습니다.",
   WINNING_NUMBER_NOT_NUMBER_ERROR:
     "[ERROR] 로또 번호는 숫자만 입력 가능합니다.",
+  WINNING_NUMBER_RANGE_ERROR:
+    "[ERROR] 로또 번호는 1 - 45 사이의 숫자만 입력 가능합니다.",
 });
 
 module.exports = { GuideString, StaticValue, ErrorString };

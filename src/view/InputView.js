@@ -6,7 +6,9 @@ const InputView = {
     this.getUserInput(GuideString.PURCHASE_PRICE, callback);
   },
 
-  readWinningNumber() {},
+  readWinningNumber(callback) {
+    this.getUserInput(GuideString.WINNING_NUMBER, callback);
+  },
 
   readBonusNumber() {},
 
